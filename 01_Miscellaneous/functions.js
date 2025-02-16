@@ -41,7 +41,6 @@ function sleepingAction(name) {
 console.log(genericPerformer(`Andreas`, sleepingAction))
 
 
-
 // Tara owns at boxing
 // One-liner
 console.log(genericPerformer(`Tara`, (name) => `${name} owns at boxing.`))
