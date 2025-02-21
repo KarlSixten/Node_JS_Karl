@@ -1,10 +1,13 @@
 //Importer express
+const e = require("express");
 const express = require("express");
 //Instantier express
 const app = express();
 
 // Sørg for at JSON kan parses til JS objekter
 app.use(express.json());
+
+const PORT = 8080;
 
 const fingerBones = [
     {
@@ -17,17 +20,19 @@ const fingerBones = [
     }
 ]
 
+let nextId = fingerBones.length + 1
+
 app.get("/fingerbones", (req, res) => {
     res.send({ data : fingerBones })
 })
 
 app.get("/fingerbones/:id", (req, res) => {
     // Alt fra url er String, så id skal laves til et tal
-    const fingerBoneId = Number(req.params.id)
-    const foundFingerBone = fingerBones.find((fingerBone) => fingerBone.id === fingerBoneId);
+    const providedFingerboneId = Number(req.params.id)
+    const foundFingerBone = fingerBones.find((fingerBone) => fingerBone.id === providedFingerboneId);
 
     if (!foundFingerBone) {
-        res.status(404).send({ error : `No finger bones found with id ${fingerBoneId}`})
+        res.status(404).send({ error: `No fingerbone found with id: ${providedFingerboneId}` })
     } else {
         res.send({ data : foundFingerBone})
     }
@@ -35,44 +40,60 @@ app.get("/fingerbones/:id", (req, res) => {
 
 app.post("/fingerbones", (req, res) => {
 
-    fingerBones.push(
-        {
-            id: req.body.id,
-            name: req.body.name
-        }
-    )
+    const newFingerbone = req.body;
+    newFingerbone.id = nextId++
 
-    res.send({ data : req.body })
+    fingerBones.push(newFingerbone)
+
+    res.send({ data : newFingerbone })
 })
 
+app.patch("/fingerbones/:id", (req, res) => {
+    const providedFingerboneId = Number(req.params.id);
+    const foundFingerBoneIndex = fingerBones.findIndex((fingerBone) => fingerBone.id === providedFingerboneId);
+    
+    if (foundFingerBoneIndex === -1) {
+        return res.status(404).send({ error: `No fingerbone found with id: ${providedFingerboneId}` });
+    } else {
+        const existingFingerbone = fingerBones[foundFingerBoneIndex]
+        
+        // Tag existingFingerbone som udgangspunkt, lad req.body overskrive hvor nødvendigt, id sættes altid til at være det originale ID
+        const newFingerbone = { ...existingFingerbone, ...req.body, id : existingFingerbone.id };
+
+        fingerBones[foundFingerBoneIndex] = newFingerbone;
+
+        res.send({ data : newFingerbone })
+    }
+})
+
+app.delete("/fingerbones/:id", (req, res) => {
+    const providedFingerboneId = Number(req.params.id);
+
+    const foundFingerBoneIndex = fingerBones.findIndex((fingerBone) => fingerBone.id === providedFingerboneId);
+    
+    if (foundFingerBoneIndex === -1) {
+        return res.status(404).send({ error: `No fingerbone found with id: ${providedFingerboneId}` });
+    } else {
+        fingerBones.splice(filteredFingerBones, 1);
+        res.send({ data: `ID: ${providedFingerboneId} deleted` });
+    }
+  });
+
 app.put("/fingerbones/:id", (req, res) => {
-    const idToUpdate = Number(req.params.id)
-    let foundFingerBone = fingerBones.find((fingerBone) => fingerBone.id === idToUpdate);
+    const providedFingerboneId = Number(req.params.id)
+    let foundFingerBone = fingerBones.find((fingerBone) => fingerBone.id === providedFingerboneId);
 
     if (!foundFingerBone) {
-        res.status(404).send({ error : `No finger bones found with id ${idToUpdate}`})
+        res.status(404).send({ error: `No fingerbone found with id: ${providedFingerboneId}`})
     } else {
         foundFingerBone.name = req.body.name;
         res.send({ data : foundFingerBone })
     }
 })
 
-app.delete("/fingerbones/:id", (req, res) => {
-    const idToDelete = Number(req.params.id);
-    
-    const filteredFingerBones = fingerBones.filter(fingerBone => fingerBone.id !== idToDelete);
-    
-    if (filteredFingerBones.length === fingerBones.length) {
-      return res.status(404).send({ error: `No finger bones found with id ${idToDelete}` });
+app.listen(PORT, (error) => {
+    if (error) {
+        console.log(`Error starting the server:`, error)
     }
-  
-    fingerBones.length = 0;
-    fingerBones.push(...filteredFingerBones);
-  
-    res.send({ data: `ID: ${idToDelete} deleted` });
-  });
-
-
-
-const PORT = 8080;
-app.listen(PORT)
+    console.log(`Server is running on port:`, PORT)
+})
