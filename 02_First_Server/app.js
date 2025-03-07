@@ -48,4 +48,13 @@ app.post("/favoritepoliticians", (req, res) => {
 //      })
 // }))
 
+
+// Create a /proxy endpoint that calls the google homepage and returns that to the client
+
+app.get("/proxy", (req, res) => {
+    fetch("https://google.com")
+        .then(response => response.text())
+        .then(data => res.send(data));
+})
+
 app.listen(8080);

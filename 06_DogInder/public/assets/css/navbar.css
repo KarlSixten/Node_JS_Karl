@@ -1,0 +1,5 @@
+#logo {
+    width: 15vw;
+    border-radius: 100%;
+    transform: scaleX(-1)
+}
