@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Frontpage</h1>
+
+    <h2 id="welcome-message">Welcome users!</h2>
+
+    <h3 id="visitorcounts"></h3>
+
+</body>
+<script>
+    // Fetch the visitors count and show it on the page
+    fetch('/visitorcounts')
+        .then((response) => response.json())
+        .then((result) => {
+            const visitorcounts = document.getElementById('visitorcounts');
+            visitorcounts.textContent = result.data;
+            })
+</script>
+</html>
