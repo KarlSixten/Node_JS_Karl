@@ -1,27 +1,14 @@
 import express from 'express';
 
-import { frontpagePage, matchesPage } from './util/pages.js';
-
 const app = express();
 
 app.use(express.static("public"));
 
-import path from 'path';
+import pagesRouter from './routers/pagesRouter.js';
+import matchesRouter from './routers/matchesRouter.js';
 
-import { getMatches } from './util/matches.js'
-
-app.get("/", (req, res) => {
-    res.send(frontpagePage);    
-});
-
-app.get("/matches", (req, res) => {
-    res.send(matchesPage);
-})
-
-app.get("/api/matches", async (req, res) => {
-    const matches = await getMatches();
-    res.send({ data : matches });
-})
+app.use(matchesRouter);
+app.use(pagesRouter);
 
 const PORT = Number(process.env.PORT) || 8080;
 const server = app.listen(PORT, () => console.log("Server is running on port", server.address().port));
