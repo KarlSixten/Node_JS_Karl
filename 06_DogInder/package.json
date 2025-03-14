@@ -5,8 +5,8 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev" : "cross-env PORT=8080 nodemon app.js",
-    "prod" : "cross-env PORT=80 ENVIRONMENT=PROD node app.js"
+    "dev": "cross-env PORT=8080 nodemon app.js",
+    "prod": "cross-env PORT=80 ENVIRONMENT=PROD node app.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/anderslatif/Kea_DAT_Node.js_2025_Spring#readme",
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "express": "^4.21.2"
   },
   "devDependencies": {
