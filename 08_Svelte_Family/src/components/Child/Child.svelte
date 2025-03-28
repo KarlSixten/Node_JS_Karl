@@ -1,5 +1,5 @@
 <script>
-    const { name, isGirl, familySheep } = $props();
+    const { name, isGirl, familySheep, onShowLove, onEatCookie } = $props();
 </script>
 
 <div
@@ -9,6 +9,10 @@
     >
     <h2>{name}</h2>
 </div>
+
+<button onclick={() => onShowLove(name)} >Show love</button>
+<button onclick={() => onEatCookie(name)} >Eat cookie</button>
+
 
 <style>
     .is-girl {
