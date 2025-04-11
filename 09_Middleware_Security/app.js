@@ -7,9 +7,14 @@ app.use(helmet());
 
 import session from 'express-session';
 
+// Environment variabler kan også sættes med command-line når program startes.
+// Dotenv gør det bare nemmere
+
+import dotenv from 'dotenv/config';
+
 app.use(session({
     // This should never be pushed
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false } // Skal være true hvis man kører HTTPS, false hvis HTTP
