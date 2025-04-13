@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 
 const app = express();
@@ -9,8 +10,6 @@ import session from 'express-session';
 
 // Environment variabler kan også sættes med command-line når program startes.
 // Dotenv gør det bare nemmere
-
-import dotenv from 'dotenv/config';
 
 app.use(session({
     // This should never be pushed
