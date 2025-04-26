@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS runtime_environments (
 
 CREATE TABLE IF NOT EXISTS games (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
+    title TEXT NOT NULL,
     short_description VARCHAR(500),
     genre TEXT CHECK( genre IN ('MMO', 'RPG', 'FPS') ),
     runtime_environment_id INTEGER,
